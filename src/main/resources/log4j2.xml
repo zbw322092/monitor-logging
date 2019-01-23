@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" monitorInterval="10">
+
+    <Properties>
+        <Property name="LOG_ROOT_PATH">logs</Property>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %p %m%n</Property>
+        <Property name="LOG_SIZE">300KB</Property>
+    </Properties>
+
+    <Appenders>
+
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+
+        <RollingFile name="debugLog" fileName="${LOG_ROOT_PATH}/application-debug.log"
+                     filePattern="${LOG_ROOT_PATH}/application-debug-%d{yyyy-MM-dd}-%i.log.gz">
+            <LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="${LOG_SIZE}" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="infoLog" fileName="${LOG_ROOT_PATH}/application-info.log"
+                     filePattern="${LOG_ROOT_PATH}/application-info-%d{yyyy-MM-dd}-%i.log.gz" >
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="${LOG_SIZE}" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="errorLog" fileName="${LOG_ROOT_PATH}/application-error.log"
+                     filePattern="${LOG_ROOT_PATH}/application-error-%d{yyyy-MM-dd}-%i.log.gz" >
+            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="${LOG_SIZE}" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="springLog" fileName="${LOG_ROOT_PATH}/spring.log"
+                     filePattern="${LOG_ROOT_PATH}/spring-%d{yyyy-MM-dd}-%i.log.gz" >
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="${LOG_SIZE}" />
+            </Policies>
+            <DefaultRolloverStrategy max="1"/>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+
+        <Logger name="com.art.monitorlogging.controller" additivity="false" level="debug">
+            <AppenderRef ref="debugLog" />
+            <AppenderRef ref="infoLog"  />
+            <AppenderRef ref="errorLog" />
+            <AppenderRef ref="Console"  />
+        </Logger>
+
+        <Logger name="org.springframework" additivity="false" level="info">
+            <AppenderRef ref="springLog" />
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>
